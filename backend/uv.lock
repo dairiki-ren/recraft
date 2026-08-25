@@ -373,6 +373,20 @@ wheels = [
 ]
 
 [[package]]
+name = "mcsmp"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "pyeventic" },
+    { name = "websockets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5d/93/6fe7427666a72a91a0846e5263f28b417fb2e1303e5f280545efbe8f4793/mcsmp-0.0.1.tar.gz", hash = "sha256:6f359f1c58fefb2972574dce5f5aa0c56af3e033d7ce5edbe48f5fc67a93dbab", size = 20230, upload-time = "2026-01-20T16:29:22.039Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/66/56dfe996cffd42bfa180f1c2507a504ed9279a1c29751790d39d8d62dcd3/mcsmp-0.0.1-py3-none-any.whl", hash = "sha256:6dea3cc68cd755c4c0858378bf0a5b7903193c924b1520ca5fd5a234824fd61f", size = 28321, upload-time = "2026-01-20T16:29:21.002Z" },
+]
+
+[[package]]
 name = "mdurl"
 version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
@@ -470,6 +484,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pyeventic"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/00/ec2f000327dd8d2277b9276c400d47ab5fba7b3476aed0dddfdebace0631/pyeventic-0.0.1.tar.gz", hash = "sha256:e8ee935e26209d00b7412a9e4356422c2f98b32cdf0f6a2c807a9d0bbd25593f", size = 837231, upload-time = "2026-01-15T18:03:16.664Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/47/41/c888773b30fb4d0b5968145009c64f1f9e8c5012849d3cd39f31a2889ed7/pyeventic-0.0.1-py3-none-any.whl", hash = "sha256:0933c6ef292899cfb19bde9ec21664f435881b59c648b30c4a04c8d121d8ecb8", size = 12243, upload-time = "2026-01-15T18:03:15.413Z" },
+]
+
+[[package]]
 name = "pygments"
 version = "2.20.0"
 source = { registry = "https://pypi.org/simple" }
@@ -529,6 +552,8 @@ source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },
     { name = "fastapi", extra = ["standard"] },
+    { name = "httpx" },
+    { name = "mcsmp" },
     { name = "pydantic-settings" },
     { name = "sqlmodel" },
     { name = "websockets" },
@@ -543,6 +568,8 @@ dev = [
 requires-dist = [
     { name = "aiosqlite", specifier = ">=0.22.1" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.141.1" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "mcsmp", specifier = ">=0.0.1" },
     { name = "pydantic-settings", specifier = ">=2.15.0" },
     { name = "sqlmodel", specifier = ">=0.0.39" },
     { name = "websockets", specifier = ">=17.0.1" },

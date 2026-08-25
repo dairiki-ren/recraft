@@ -1,5 +1,13 @@
 {
     "python-envs.defaultEnvManager": "ms-python.python:venv",
     "licenser.license": "GPLv3",
-    "licenser.useSPDXLicenseFormat": true
+    "licenser.useSPDXLicenseFormat": true,
+    "terminal.integrated.profiles.linux": {
+        "bash (python venv activated)": {
+            "path": "/usr/bin/bash",
+            "icon": "terminal-bash",
+            "args": ["-c", "bash --rcfile <(cat ~/.bashrc ${workspaceFolder}/backend/.venv/bin/activate)"]
+        },
+    },
+    "autoDocstring.docstringFormat": "sphinx"
 }

@@ -5,7 +5,6 @@ import contextlib
 import typing
 
 import fastapi
-import fastapi.routing
 import httpx
 
 import recraft.instances.routes
@@ -14,27 +13,24 @@ import recraft.resources.routes
 from . import config, database, deps, exceptions
 
 
-class DocumentedRoute(fastapi.routing.APIRoute):
-    def __init__(self, path: str, endpoint: typing.Callable, **kwargs):
-        # Extract OpenAPI responses attached by the decorator
-        gathered_responses = getattr(endpoint, "_openapi_responses", {})
-        existing_responses = kwargs.get("responses") or {}
-
-        # Merge decorator responses with any manually defined responses
-        kwargs["responses"] = {**gathered_responses, **existing_responses}
-        super().__init__(path, endpoint, **kwargs)
-
-
 @contextlib.asynccontextmanager
 async def lifespan(app: fastapi.FastAPI) -> typing.AsyncGenerator[deps.State]:
     # Database
     await database.init_database()
-    # Shared requests session
-    async with httpx.AsyncClient(timeout=config.configuration.external_api_timeout) as httpx_async_client:
-        yield deps.State(httpx_async_client=httpx_async_client)
+    # Shared HTTPX clients
+    httpx_async_client = httpx.AsyncClient(
+        timeout=config.configuration.external_api_timeout)
+    httpx_docker_transport = httpx.AsyncHTTPTransport(
+        uds=str(config.configuration.docker_socket_path))
+    httpx_async_client_docker = httpx.AsyncClient(transport=httpx_docker_transport,
+                                                  timeout=config.configuration.server_operations_timeout)
+
+    yield deps.State(httpx_async_client=httpx_async_client, httpx_async_client_docker=httpx_async_client_docker)
+
+    await httpx_async_client.aclose()
+    await httpx_async_client_docker.aclose()
 
 app = fastapi.FastAPI(lifespan=lifespan)
-app.router.route_class = DocumentedRoute
 
 app.add_exception_handler(exceptions.AppError, exceptions.app_error_handler)
 app.add_exception_handler(fastapi.HTTPException,

@@ -67,6 +67,11 @@ class NotFoundError(AppError):
     message = "The resource could not be found"
 
 
+class LockedError(AppError):
+    status_code = 409
+    message = "The resource is currently locked"
+
+
 class ExternalError(AppError):
     status_code = 503
     message = "An external error has occured"
@@ -87,29 +92,6 @@ class ErrorContent(pydantic.BaseModel):
     error_code: str
     message: str
     params: dict[str, typing.Any] | None = None
-
-
-class DocumentedRouteFuntion(typing.Protocol):
-    _openapi_responses: dict[int, dict[str, typing.Any]]
-    def __call__(self, *args: typing.Any, **
-                 kwargs: typing.Any) -> typing.Any: ...
-
-
-F = typing.TypeVar("F", bound=DocumentedRouteFuntion)
-
-
-def document_exceptions(*exceptions: type[AppError]):
-    """Attaches exception response schemas to the endpoint's OpenAPI metadata."""
-
-    def decorator(func: F) -> F:
-        if not hasattr(func, "_openapi_responses"):
-            func._openapi_responses = {}
-
-        for exc in exceptions:
-            func._openapi_responses[exc.status_code] = exc.openapi_response()
-        return func
-
-    return decorator
 
 
 def app_error_handler(request: fastapi.Request, exc: Exception):
