@@ -24,15 +24,18 @@ class ServerManager[VersionType](abc.ABC):
 
     @abc.abstractmethod
     @classmethod
-    async def get_supported_versions(cls) -> list[VersionType]:
+    async def get_supported_versions(cls, refresh: bool = False, *args, **kwargs) -> list[VersionType]:
         """Get a list of versions this server manager supports provisioning
 
+        :param refresh: Force a refresh of the version list (implementation
+            detail vary), defaults to False
+        :type refresh: bool, optional
         :return: A list of versions
         :rtype: list[Version]
         """
 
     @abc.abstractmethod
-    async def provision(self, version: VersionType):
+    async def provision(self, version: VersionType, *args, **kwargs):
         """Provisions a server instance
 
         :param version: Game version
