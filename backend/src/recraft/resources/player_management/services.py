@@ -102,12 +102,12 @@ async def delete_player_list(database: sqlmodel.ext.asyncio.session.AsyncSession
 
 
 async def read_memberships(database: sqlmodel.ext.asyncio.session.AsyncSession):
-    result = await database.exec(sqlmodel.select(models.PlayerListPlayerLink))
+    result = await database.exec(sqlmodel.select(models.Membership))
     return result.all()
 
 
 async def create_membership(database: sqlmodel.ext.asyncio.session.AsyncSession, player_list_id: int, player_id: int, membership: schemas.PlayerListPlayerLinkCreate):
-    db_membership = models.PlayerListPlayerLink.model_validate(
+    db_membership = models.Membership.model_validate(
         membership, update={"player_list_id": player_list_id, "player_id": player_id})
     database.add(db_membership)
     await database.commit()
@@ -117,7 +117,7 @@ async def create_membership(database: sqlmodel.ext.asyncio.session.AsyncSession,
 
 async def update_membership(database: sqlmodel.ext.asyncio.session.AsyncSession, player_list_id: int, player_id: int, membership: schemas.PlayerListPlayerLinkUpdate):
     db_membership = await database.get(
-        models.PlayerListPlayerLink, (player_list_id, player_id))
+        models.Membership, (player_list_id, player_id))
     if not db_membership:
         raise exceptions.MembershipNotFoundError()
     db_membership.sqlmodel_update(membership.model_dump(exclude_unset=True))
@@ -129,7 +129,7 @@ async def update_membership(database: sqlmodel.ext.asyncio.session.AsyncSession,
 
 async def delete_membership(database: sqlmodel.ext.asyncio.session.AsyncSession, player_list_id: int, player_id: int):
     membership = await database.get(
-        models.PlayerListPlayerLink, (player_list_id, player_id))
+        models.Membership, (player_list_id, player_id))
     if not membership:
         raise exceptions.MembershipNotFoundError()
     await database.delete(membership)

@@ -28,10 +28,6 @@ async def lifespan(app: fastapi.FastAPI) -> typing.AsyncGenerator[deps.State]:
     cache_client = hishel.httpx.AsyncCacheClient(storage=cache_client_storage)
 
     httpx_async_client = cache_client
-    httpx_docker_transport = httpx.AsyncHTTPTransport(
-        uds=str(config.configuration.docker_socket_path))
-    httpx_async_client_docker = httpx.AsyncClient(transport=httpx_docker_transport,
-                                                  timeout=config.configuration.server_operations_timeout)
 
     # Instance managers
     instance_managers = {}
@@ -39,18 +35,15 @@ async def lifespan(app: fastapi.FastAPI) -> typing.AsyncGenerator[deps.State]:
         await recraft.instances.lifespan.init(session,
                                               instance_managers,
                                               config.configuration.shared_data_path,
-                                              httpx_async_client,
-                                              httpx_async_client_docker)
+                                              httpx_async_client)
 
     yield deps.State(
         httpx_async_client=httpx_async_client,
-        httpx_async_client_docker=httpx_async_client_docker,
         instance_managers=instance_managers,
         configuration=config.configuration
     )
 
     await httpx_async_client.aclose()
-    await httpx_async_client_docker.aclose()
 
 app = fastapi.FastAPI(lifespan=lifespan)
 

@@ -39,14 +39,14 @@ class OperatorLevel(enum.Enum):
     OWNER = 4
 
 
-class PlayerListPlayerLinkBase(sqlmodel.SQLModel):
+class MembershipBase(sqlmodel.SQLModel):
     access_permission: AccessPermission | None = None
     is_operator: bool = False
     operator_level: OperatorLevel = OperatorLevel.GAMEMASTER
     operator_bypasses_player_limit: bool = False
 
 
-class PlayerListPlayerLink(PlayerListPlayerLinkBase, table=True):
+class Membership(MembershipBase, table=True):
     player_id: int = sqlmodel.Field(foreign_key="player.id", primary_key=True)
     player_list_id: int = sqlmodel.Field(
         foreign_key="playerlist.id", primary_key=True)

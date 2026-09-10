@@ -16,7 +16,6 @@ from . import config
 
 class State(typing.TypedDict):
     httpx_async_client: httpx.AsyncClient
-    httpx_async_client_docker: httpx.AsyncClient
     instance_managers: dict[int,
                             recraft.instances.manager.instance.DockerInstanceManager]
     configuration: config.Configuration
@@ -24,10 +23,6 @@ class State(typing.TypedDict):
 
 def get_httpx_async_client(request: fastapi.Request):
     return request.state["httpx_async_client"]
-
-
-def get_httpx_async_client_docker(request: fastapi.Request):
-    return request.state["httpx_async_client_docker"]
 
 
 def get_instance_managers(request: fastapi.Request):
@@ -45,9 +40,6 @@ async def get_db_session():
 
 HttpxAsyncClientDep = typing.Annotated[
     httpx.AsyncClient, fastapi.Depends(get_httpx_async_client)
-]
-HttpxAsyncClientDockerDep = typing.Annotated[
-    httpx.AsyncClient, fastapi.Depends(get_httpx_async_client_docker)
 ]
 InstanceManagersDep = typing.Annotated[
     list[recraft.instances.manager.instance.DockerInstanceManager],

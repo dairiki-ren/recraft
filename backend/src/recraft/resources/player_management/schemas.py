@@ -35,11 +35,11 @@ class PlayerListUpdate(sqlmodel.SQLModel):
     name: str | None = None
 
 
-class PlayerListPlayerLinkCreate(models.PlayerListPlayerLinkBase):
+class PlayerListPlayerLinkCreate(models.MembershipBase):
     pass
 
 
-class PlayerListPlayerLinkRead(models.PlayerListPlayerLinkBase):
+class PlayerListPlayerLinkRead(models.MembershipBase):
     player_id: int
     player_list_id: int
 
