@@ -29,7 +29,7 @@ class PlayerList(sqlmodel.SQLModel, table=True):
 
 class AccessPermission(enum.Enum):
     BANNED = 0
-    WHITELISTED = 1
+    ALLOWED = 1
 
 
 class OperatorLevel(enum.Enum):

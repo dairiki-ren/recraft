@@ -24,6 +24,7 @@
             "env": {
                 "DATA_PATH": "${workspaceFolder}/backend/data/data",
                 "SHARED_DATA_PATH": "${workspaceFolder}/backend/data/shared",
+                "SERVER_OPERATIONS_TIMEOUT": "10"
             },
             "preLaunchTask": "Make backend data directories",
             "jinja": true

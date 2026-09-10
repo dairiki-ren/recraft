@@ -9,21 +9,26 @@ from . import environment
 VersionType = typing.TypeVar("VersionType")
 
 
-class ServerManager[VersionType](abc.ABC):
+class Server[VersionType](abc.ABC):
     """An abstraction class that streamlines provisioning and configuration of
     different server types
     """
 
+    @property
     @abc.abstractmethod
-    def __init__(self, environment_manager: environment.EnvironmentManager):
+    def cmdline(self) -> list[str]:
+        pass
+
+    @abc.abstractmethod
+    def __init__(self, environment_manager: environment.Environment):
         """Initialize a server manager
 
         :param environment_manager: An environment manager
         :type environment_manager: environment.EnvironmentManager
         """
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     async def get_supported_versions(cls, refresh: bool = False, *args, **kwargs) -> list[VersionType]:
         """Get a list of versions this server manager supports provisioning
 

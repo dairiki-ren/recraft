@@ -94,7 +94,7 @@ async def delete_player_list(database: recraft.deps.DBSessionDep, player_list_id
 
 @router.get("/memberships/", response_model=list[schemas.PlayerListPlayerLinkRead])
 async def get_memberships(database: recraft.deps.DBSessionDep):
-    return services.read_memberships(database)
+    return await services.read_memberships(database)
 
 
 @router.put("/memberships/", response_model=schemas.PlayerListPlayerLinkRead, status_code=fastapi.status.HTTP_201_CREATED)

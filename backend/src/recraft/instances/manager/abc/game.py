@@ -13,7 +13,7 @@ class Player(pydantic.BaseModel):
     id: uuid.UUID
 
 
-class GameManager(abc.ABC):
+class Game(abc.ABC):
     """An abstraction class that provides access to game-specific features such
     as player management or event handling
     """

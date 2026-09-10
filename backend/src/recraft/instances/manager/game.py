@@ -9,13 +9,20 @@ import mcsmp.schemas
 from .abc import game
 
 
-class SMPManager(game.GameManager):
-    def __init__(self, host: str, port: int, secret: str, *args, **kwargs):
+class JsonRpcGame(game.Game):
+    def __init__(self, host: str, port: int, secret: str, **kwargs):
         self.host = host
         self.port = port
         self.secret = secret
         self._mcsmp_client = mcsmp.Client(host, port, secret, **kwargs)
         self._loop_task: asyncio.Task | None = None
+
+    async def __aenter__(self):
+        await self.connect()
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.disconnect()
+        return exc_type, exc, tb
 
     async def connect(self):
         await self._mcsmp_client.connect()
