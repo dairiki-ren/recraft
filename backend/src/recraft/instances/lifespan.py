@@ -13,13 +13,11 @@ from .manager import instance
 async def init(session: sqlmodel.ext.asyncio.session.AsyncSession,
                instance_managers: dict,
                shared_path: pathlib.Path,
-               httpx_async_client: httpx.AsyncClient,
-               httpx_async_client_docker: httpx.AsyncClient):
+               httpx_async_client: httpx.AsyncClient):
     results = (await session.exec(sqlmodel.select(models.Instance))).all()
     for result in results:
-        instance_managers[result.id] = instance.DockerInstanceManager(
+        instance_managers[result.id] = instance.ProcessEnvironment(
             f"recraft_{result.id}",
             shared_path,
-            httpx_async_client,
-            httpx_async_client_docker,
+            httpx_async_client
         )
